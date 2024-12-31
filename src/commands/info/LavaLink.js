@@ -1,4 +1,4 @@
-son 6 servidores en total,  quiero que la lista este organizado en pareja los servidores, quiero que el server 1 y 2 esten en la primera columna, luego 3 y 4 y luego 5 y 6           const Command = require("../../structures/Command.js");
+const Command = require("../../structures/Command.js");
 
 module.exports = class LavaLink extends Command {
   constructor(client) {

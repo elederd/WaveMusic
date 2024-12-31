@@ -43,6 +43,8 @@ module.exports = class LavaLink extends Command {
     embed.setTimestamp();
 
     const fields = [];
+    let row = []; // Para almacenar los servidores en cada fila
+
     client.shoukaku.nodes.forEach((node, index) => {
       const statusIcon = node.stats ? "🟢" : "🔴";
 
@@ -59,27 +61,24 @@ module.exports = class LavaLink extends Command {
           `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
         ];
 
-        fields.push({
+        row.push({
           name: `🖥️ **${node.name}**`,
           value: nodeStats.join("\n"),
           inline: true,
         });
       } else {
         // Nodo inactivo: mensaje predeterminado
-        fields.push({
+        row.push({
           name: `🖥️ **${node.name}**`,
           value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
           inline: true,
         });
       }
-      
-      // Cada 2 nodos, se agrega una línea vacía para separar las columnas
-      if ((index + 1) % 2 === 0 && index + 1 < client.shoukaku.nodes.length) {
-        fields.push({
-          name: '\u200B', // Un espacio vacío para separar columnas
-          value: '\u200B',
-          inline: true,
-        });
+
+      // Después de 2 servidores, agregamos la fila a los campos
+      if ((index + 1) % 2 === 0 || index + 1 === client.shoukaku.nodes.length) {
+        fields.push(...row);
+        row = []; // Limpiar la fila para la siguiente
       }
     });
 

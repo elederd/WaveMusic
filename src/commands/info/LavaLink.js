@@ -48,35 +48,25 @@ module.exports = class LavaLink extends Command {
 
       if (node.stats) {
         // Nodo activo: mostrar estadísticas detalladas
-        const fields = [
-          `**Estado:** ${statusIcon}`,
-          `**Conectados:** ${node.stats.players}`,
-          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
-        ];
-        const secondColumn = [
-          `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
-          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
-          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-        ];
-        const thirdColumn = [
-          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
-          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
-        ];
-
         embed.addFields(
           {
             name: `🖥️ **${node.name}**`,
-            value: fields.join("\n"),
+            value: `**Estado:** ${statusIcon}\n` +
+              `**Conectados:** ${node.stats.players}\n` +
+              `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
             inline: true,
           },
           {
             name: "\u200B",  // Espacio vacío para alinear las columnas
-            value: secondColumn.join("\n"),
+            value: `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}\n` +
+              `**Cores:** ${node.stats.cpu.cores} Core(s)\n` +
+              `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
             inline: true,
           },
           {
             name: "\u200B",  // Espacio vacío para alinear las columnas
-            value: thirdColumn.join("\n"),
+            value: `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%\n` +
+              `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
             inline: true,
           }
         );

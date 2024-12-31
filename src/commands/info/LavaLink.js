@@ -42,47 +42,40 @@ module.exports = class LavaLink extends Command {
     });
     embed.setTimestamp();
 
-    const fields = [];
-    let row = []; // Para almacenar los servidores en cada fila
+    const groupedNodes = [];
+    let currentGroup = [];
 
     client.shoukaku.nodes.forEach((node, index) => {
       const statusIcon = node.stats ? "🟢" : "🔴";
 
-      if (node.stats) {
-        // Nodo activo: mostrar estadísticas detalladas
-        const nodeStats = [
-          `**Estado:** ${statusIcon}`,
-          `**Conectados:** ${node.stats.players}`,
-          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
-          `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
-          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
-          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
-          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
-        ];
+      const fields = [
+        `**Estado:** ${statusIcon}`,
+        `**Conectados:** ${node.stats ? node.stats.players : "N/A"}`,
+        `**Jugadores Reproduciendo:** ${node.stats ? node.stats.playingPlayers : "N/A"}`,
+        `**Tiempo Activo:** ${node.stats ? client.utils.formatTime(node.stats.uptime) : "N/A"}`,
+        `**Cores:** ${node.stats ? node.stats.cpu.cores + " Core(s)" : "N/A"}`,
+        `**Memoria:** ${node.stats ? client.utils.formatBytes(node.stats.memory.used) + " / " + client.utils.formatBytes(node.stats.memory.reservable) : "N/A"}`,
+        `**Carga del Sistema:** ${node.stats ? (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2) + "%" : "N/A"}`,
+        `**Carga de Lavalink:** ${node.stats ? (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2) + "%" : "N/A"}`,
+      ];
 
-        row.push({
-          name: `🖥️ **${node.name}**`,
-          value: nodeStats.join("\n"),
-          inline: true,
-        });
-      } else {
-        // Nodo inactivo: mensaje predeterminado
-        row.push({
-          name: `🖥️ **${node.name}**`,
-          value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
-          inline: true,
-        });
-      }
+      currentGroup.push({
+        name: `🖥️ **${node.name}**`,
+        value: fields.join("\n"),
+        inline: true,
+      });
 
-      // Después de 2 servidores, agregamos la fila a los campos
-      if ((index + 1) % 2 === 0 || index + 1 === client.shoukaku.nodes.length) {
-        fields.push(...row);
-        row = []; // Limpiar la fila para la siguiente
+      // Si hemos llegado a un grupo de 2, lo añadimos al array y comenzamos uno nuevo
+      if (currentGroup.length === 2 || index === client.shoukaku.nodes.length - 1) {
+        groupedNodes.push(currentGroup);
+        currentGroup = [];
       }
     });
 
-    embed.addFields(fields);
+    // Añadir los grupos al embed
+    groupedNodes.forEach((group) => {
+      embed.addFields(group);
+    });
 
     return await ctx.sendMessage({ embeds: [embed] });
   }

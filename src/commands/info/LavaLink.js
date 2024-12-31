@@ -65,21 +65,15 @@ module.exports = class LavaLink extends Command {
       });
     });
 
-    // Organizar los servidores en dos columnas
+    // Organizar los servidores en 3 filas y 2 columnas
     const rows = [];
-    for (let i = 0; i < serverFields.length; i += 3) {
-      rows.push(serverFields.slice(i, i + 3));
+    for (let i = 0; i < serverFields.length; i += 2) {
+      rows.push(serverFields.slice(i, i + 2));
     }
 
     // Añadir las filas al embed
-    rows.forEach((row, index) => {
-      if (index === 0) {
-        // Primera columna
-        embed.addFields(row);
-      } else {
-        // Segunda columna
-        embed.addFields(row);
-      }
+    rows.forEach((row) => {
+      embed.addFields(row);
     });
 
     return await ctx.sendMessage({ embeds: [embed] });

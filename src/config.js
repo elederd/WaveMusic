@@ -34,15 +34,7 @@ module.exports = {
         deezer: 'https://media.discordapp.net/attachments/963097935820750878/1054333450024394802/5968803.png',
     },
     production: parseBoolean(process.env.PRODUCTION) || true,
-    lavalink: [
-        {
-            url: process.env.LAVALINK_URL,
-            auth: process.env.LAVALINK_AUTH,
-            name: process.env.LAVALINK_NAME,
-            port: process.env.LAVALINK_PORT,
-            secure: parseBoolean(process.env.LAVALINK_SECURE) || false,
-        },
-    ],
+    lavalink: JSON.parse(process.env.LAVALINK_NODES || '[]'), // Leer nodos Lavalink desde el archivo .env
 };
 function parseBoolean(value) {
     if (typeof value === 'string') {

@@ -68,13 +68,13 @@ module.exports = class LavaLink extends Command {
     // Dividir los servidores en 2 columnas y 3 filas
     const rows = [];
     while (serverFields.length > 0) {
-      rows.push(serverFields.splice(0, 2));  // Extrae 2 elementos (servidores) por fila
+      rows.push(serverFields.splice(0, 2));  // Extrae 2 servidores por fila
     }
 
-    // Añadir las filas al embed
-    rows.forEach((row) => {
-      embed.addFields(row);  // Esto agrega una fila con 2 servidores
-    });
+    // Añadir las filas al embed, asegurando que solo haya 2 columnas por fila
+    embed.addFields(rows[0]);  // Primera fila
+    embed.addFields(rows[1]);  // Segunda fila
+    embed.addFields(rows[2]);  // Tercera fila
 
     return await ctx.sendMessage({ embeds: [embed] });
   }

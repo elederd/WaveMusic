@@ -30,45 +30,53 @@ module.exports = class LavaLink extends Command {
 
   async run(client, ctx) {
     const embed = this.client.embed();
-    embed.setTitle("Lavalink Stats");
+    embed.setTitle("🌐  Lavalink Status");
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
+    embed.setDescription(
+      "\n"
+    );
+    embed.setFooter({
+      text: `Solicitado por ${ctx.author.username}`,
+      iconURL: ctx.author.avatarURL(),
+    });
     embed.setTimestamp();
 
-    let nodeList1 = [];
-    let nodeList2 = [];
+    client.shoukaku.nodes.forEach((node) => {
+      const statusIcon = node.stats ? "🟢" : "🔴";
 
-    // Divide los nodos en dos listas de servidores
-    client.shoukaku.nodes.forEach((node, index) => {
-      const nodeStats = `
-        **Name**: ${node.name} (${node.stats ? "🟢" : "🔴"})\n
-        **Players**: ${node.stats.players}\n
-        **Playing Players**: ${node.stats.playingPlayers}\n
-        **Uptime**: ${client.utils.formatTime(node.stats.uptime)}\n
-        **Cores**: ${node.stats.cpu.cores} Core(s)\n
-        **Memory Usage**: ${client.utils.formatBytes(node.stats.memory.used)}/${client.utils.formatBytes(node.stats.memory.reservable)}\n
-        **System Load**: ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%\n
-        **Lavalink Load**: ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%
-      `;
+      if (node.stats) {
+        // Nodo activo: mostrar estadísticas detalladas
+      const fields = [
+        `**Estado:** ${statusIcon}`,
+        `**Conectados:** ${node.stats ? node.stats.players : "N/A"}`,
+        `**Reproduciendo:** ${node.stats ? node.stats.playingPlayers : "N/A"}`,
+        `**Activo:** ${node.stats ? client.utils.formatTime(node.stats.uptime) : "N/A"}`,
+        `**Cores:** ${node.stats ? node.stats.cpu.cores : "N/A"} Core(s)`,
+        `**Memoria:** ${node.stats ? client.utils.formatBytes(node.stats.memory.used) : "N/A"} / ${node.stats ? client.utils.formatBytes(node.stats.memory.reservable) : "N/A"}`,
+        `**Sistema:** ${node.stats ? (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2) : "N/A"}%`,
+        `**Lavalink:** ${node.stats ? (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2) : "N/A"}%`,
+      ];
 
-      // Dividir nodos en dos listas
-      if (index < 6) {
-        nodeList1.push(nodeStats);
+        embed.addFields([
+          {
+            name: `🖥️ **${node.name}**`,
+            value: fields.join("\n"),
+            inline: true,
+          },
+        ]);
       } else {
-        nodeList2.push(nodeStats);
+        // Nodo inactivo: mensaje predeterminado
+        embed.addFields([
+          {
+            name: `🖥️ **${node.name}**`,
+            value: `**Estado:** ${statusIcon}\nServer no disponible.`,
+            inline: true,
+          },
+        ]);
       }
-    });
-
-    // Añadir las listas al embed
-    embed.addFields({
-      name: "Servers 1-6",
-      value: nodeList1.join("\n\n"),
-    });
-    embed.addFields({
-      name: "Servers 7-12",
-      value: nodeList2.join("\n\n"),
     });
 
     return await ctx.sendMessage({ embeds: [embed] });
   }
-};
+};             

@@ -34,7 +34,8 @@ module.exports = class LavaLink extends Command {
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
     embed.setDescription(
-      "\n"
+      "Aquí están las estadísticas actuales de los nodos Lavalink que están en uso.\n" +
+        "🟢 = Activo | 🔴 = Inactivo"
     );
     embed.setFooter({
       text: `Solicitado por ${ctx.author.username}`,
@@ -49,12 +50,12 @@ module.exports = class LavaLink extends Command {
         // Nodo activo: mostrar estadísticas detalladas
         const fields = [
           `**Estado:** ${statusIcon}`,
-          `**Conectados:** ${node.stats.players}`,
-          `**Reproduciendo:** ${node.stats.playingPlayers}`,
-          `**Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
+          `**Jugadores Conectados:** ${node.stats.players}`,
+          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
+          `**Uptime:** ${client.utils.formatTime(node.stats.uptime)}`,
           `**Cores:** ${node.stats.cpu.cores} Core(s)`,
           `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-          `**Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
           `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
         ];
 
@@ -70,7 +71,7 @@ module.exports = class LavaLink extends Command {
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
-            value: `**Estado:** ${statusIcon}\nNo disponible.`,
+            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
             inline: true,
           },
         ]);

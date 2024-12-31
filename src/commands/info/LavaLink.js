@@ -30,39 +30,54 @@ module.exports = class LavaLink extends Command {
 
   async run(client, ctx) {
     const embed = this.client.embed();
-    embed.setTitle("🌐 Lavalink Status")
-      .setColor(this.client.color.main)
-      .setThumbnail(this.client.user.avatarURL({}))
-      .setDescription(
-        "Aquí están las estadísticas actuales de los nodos Lavalink que están en uso.\n" +
+    embed.setTitle("🌐 Lavalink Status");
+    embed.setColor(this.client.color.main);
+    embed.setThumbnail(this.client.user.avatarURL({}));
+    embed.setDescription(
+      "Aquí están las estadísticas actuales de los nodos Lavalink que están en uso.\n" +
         "🟢 = Activo | 🔴 = Inactivo"
-      )
-      .setFooter({
-        text: `Solicitado por ${ctx.author.username}`,
-        iconURL: ctx.author.avatarURL(),
-      })
-      .setTimestamp();
+    );
+    embed.setFooter({
+      text: `Solicitado por ${ctx.author.username}`,
+      iconURL: ctx.author.avatarURL(),
+    });
+    embed.setTimestamp();
 
-    client.shoukaku.nodes.forEach((node) => {
+    const nodes = Array.from(client.shoukaku.nodes.values()).slice(0, 3); // Limitar a los 3 primeros nodos
+
+    nodes.forEach((node) => {
       const statusIcon = node.stats ? "🟢" : "🔴";
 
-      embed.addFields([
-        {
-          name: `🖥️ **${node.name}**`,
-          value: node.stats
-            ? [
-                `**Estado:** ${statusIcon}`,
-                `**Conectados:** ${node.stats.players}`,
-                `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
-                `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-                `**Cores:** ${node.stats.cpu.cores}`,
-                `**Carga del Sistema:** ${(node.stats.cpu.systemLoad * 100).toFixed(2)}%`,
-                `**Carga de Lavalink:** ${(node.stats.cpu.lavalinkLoad * 100).toFixed(2)}%`,
-              ].join("\n")
-            : `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
-          inline: false, // Cambia esto a "true" si quieres que los campos estén uno al lado del otro
-        },
-      ]);
+      if (node.stats) {
+        // Nodo activo: mostrar estadísticas detalladas
+        const fields = [
+          `**Estado:** ${statusIcon}`,
+          `**Conectados:** ${node.stats.players}`,
+          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
+          `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
+          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
+          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
+          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+        ];
+
+        embed.addFields([
+          {
+            name: `🖥️ **${node.name}**`,
+            value: fields.join("\n"),
+            inline: false, // Hacer el embed más ancho
+          },
+        ]);
+      } else {
+        // Nodo inactivo: mensaje predeterminado
+        embed.addFields([
+          {
+            name: `🖥️ **${node.name}**`,
+            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
+            inline: false, // Hacer el embed más ancho
+          },
+        ]);
+      }
     });
 
     return await ctx.sendMessage({ embeds: [embed] });

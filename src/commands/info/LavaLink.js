@@ -51,21 +51,21 @@ module.exports = class LavaLink extends Command {
         embed.addFields(
           {
             name: `🖥️ **${node.name}**`,
-            value: `**Estado:** ${statusIcon}\n` +
-              `**Conectados:** ${node.stats.players}\n` +
+            value: `**Estado:** ${statusIcon} | ` +
+              `**Conectados:** ${node.stats.players} | ` +
               `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
             inline: true,
           },
           {
             name: "\u200B",  // Espacio vacío para alinear las columnas
-            value: `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}\n` +
-              `**Cores:** ${node.stats.cpu.cores} Core(s)\n` +
+            value: `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)} | ` +
+              `**Cores:** ${node.stats.cpu.cores} Core(s) | ` +
               `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
             inline: true,
           },
           {
             name: "\u200B",  // Espacio vacío para alinear las columnas
-            value: `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%\n` +
+            value: `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}% | ` +
               `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
             inline: true,
           }

@@ -43,10 +43,9 @@ module.exports = class LavaLink extends Command {
     });
     embed.setTimestamp();
 
-    let serverCount = 0;
     let serverFields = [];
 
-    client.shoukaku.nodes.forEach((node, index) => {
+    client.shoukaku.nodes.forEach((node) => {
       const statusIcon = node.stats ? "🟢" : "🔴";
       const fields = [
         `**Estado:** ${statusIcon}`,
@@ -64,19 +63,23 @@ module.exports = class LavaLink extends Command {
         value: fields.join("\n"),
         inline: true,
       });
-
-      serverCount++;
     });
 
-    // Organizar los servidores en filas de 3 columnas
+    // Organizar los servidores en dos columnas
     const rows = [];
-    for (let i = 0; i < serverFields.length; i += 2) {
-      rows.push(serverFields.slice(i, i + 2));
+    for (let i = 0; i < serverFields.length; i += 3) {
+      rows.push(serverFields.slice(i, i + 3));
     }
 
     // Añadir las filas al embed
-    rows.forEach(row => {
-      embed.addFields(row);
+    rows.forEach((row, index) => {
+      if (index === 0) {
+        // Primera columna
+        embed.addFields(row);
+      } else {
+        // Segunda columna
+        embed.addFields(row);
+      }
     });
 
     return await ctx.sendMessage({ embeds: [embed] });

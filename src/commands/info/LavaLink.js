@@ -30,33 +30,38 @@ module.exports = class LavaLink extends Command {
 
   async run(client, ctx) {
     const embed = this.client.embed();
-    embed.setTitle("Lavalink Stats");
+    embed.setTitle("🌐 Lavalink Status");
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
+    embed.setDescription(
+      "Aquí están las estadísticas actuales de los nodos Lavalink que están en uso.\n" +
+        "🟢 = Activo | 🔴 = Inactivo"
+    );
+    embed.setFooter({
+      text: `Solicitado por ${ctx.author.username}`,
+      iconURL: ctx.author.avatarURL(),
+    });
     embed.setTimestamp();
 
     client.shoukaku.nodes.forEach((node) => {
       try {
-        // Agrupamos todos los datos de cada servidor en un solo objeto `fields`.
+        const statusIcon = node.stats ? "🟢" : "🔴";
+        const fields = [
+          `**Estado:** ${statusIcon}`,
+          `**Jugadores Conectados:** ${node.stats.players}`,
+          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
+          `**Uptime:** ${client.utils.formatTime(node.stats.uptime)}`,
+          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
+          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
+          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+        ];
+
         embed.addFields([
           {
-            name: `**${node.name} (${node.stats ? "🟢" : "🔴"})**`,
-            value: [
-              `**Player:** ${node.stats.players}`,
-              `**Playing Players:** ${node.stats.playingPlayers}`,
-              `**Uptime:** ${client.utils.formatTime(node.stats.uptime)}`,
-              `**Cores:** ${node.stats.cpu.cores} Core(s)`,
-              `**Memory Usage:** ${client.utils.formatBytes(
-                node.stats.memory.used
-              )} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-              `**System Load:** ${(Math.round(
-                node.stats.cpu.systemLoad * 100
-              ) / 100).toFixed(2)}%`,
-              `**Lavalink Load:** ${(Math.round(
-                node.stats.cpu.lavalinkLoad * 100
-              ) / 100).toFixed(2)}%`,
-            ].join("\n"),
-            inline: true, // Hacemos que el campo sea inline para mostrar varios lado a lado.
+            name: `🖥️ **${node.name}**`,
+            value: fields.join("\n"),
+            inline: true,
           },
         ]);
       } catch (e) {

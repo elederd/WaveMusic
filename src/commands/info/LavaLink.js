@@ -44,8 +44,10 @@ module.exports = class LavaLink extends Command {
     embed.setTimestamp();
 
     client.shoukaku.nodes.forEach((node) => {
-      try {
-        const statusIcon = node.stats ? "🟢" : "🔴";
+      const statusIcon = node.stats ? "🟢" : "🔴";
+
+      if (node.stats) {
+        // Nodo activo: mostrar estadísticas detalladas
         const fields = [
           `**Estado:** ${statusIcon}`,
           `**Jugadores Conectados:** ${node.stats.players}`,
@@ -64,8 +66,15 @@ module.exports = class LavaLink extends Command {
             inline: true,
           },
         ]);
-      } catch (e) {
-        console.log(e);
+      } else {
+        // Nodo inactivo: mensaje predeterminado
+        embed.addFields([
+          {
+            name: `🖥️ **${node.name}**`,
+            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
+            inline: true,
+          },
+        ]);
       }
     });
 

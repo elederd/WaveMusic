@@ -48,16 +48,16 @@ module.exports = class LavaLink extends Command {
 
       if (node.stats) {
         // Nodo activo: mostrar estadísticas detalladas
-const fields = [
-  `**Estado:** ${statusIcon}`,
-  `**Jugadores Conectados:** ${node.stats.players}\u2003**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
-  `**Uptime:** ${client.utils.formatTime(node.stats.uptime)}`,
-  `**Cores:** ${node.stats.cpu.cores} Core(s)`,
-  `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
-  `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
-  `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
-];
-
+        const fields = [
+          `**Estado:** ${statusIcon}`,
+          `**Conectados:** ${node.stats.players}`,
+          `**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
+          `**Tiempo Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
+          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
+          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
+          `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+        ];
 
         embed.addFields([
           {
@@ -80,4 +80,4 @@ const fields = [
 
     return await ctx.sendMessage({ embeds: [embed] });
   }
-};
+};             

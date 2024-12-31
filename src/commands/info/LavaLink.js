@@ -47,31 +47,32 @@ module.exports = class LavaLink extends Command {
       const statusIcon = node.stats ? "🟢" : "🔴";
 
       if (node.stats) {
+        // Nodo activo: mostrar estadísticas detalladas
+const fields = [
+  `**Estado:** ${statusIcon}`,
+  `**Jugadores Conectados:** ${node.stats.players}\u2003**Jugadores Reproduciendo:** ${node.stats.playingPlayers}`,
+  `**Uptime:** ${client.utils.formatTime(node.stats.uptime)}`,
+  `**Cores:** ${node.stats.cpu.cores} Core(s)`,
+  `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
+  `**Carga del Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+  `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+];
+
+
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
-            value: `\`\`\`
-Estado: ${statusIcon}
-Jugadores Conectados: ${node.stats.players}
-Jugadores Reproduciendo: ${node.stats.playingPlayers}
-Uptime: ${client.utils.formatTime(node.stats.uptime)}
-Cores: ${node.stats.cpu.cores} Core(s)
-Memoria: ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}
-Carga del Sistema: ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%
-Carga de Lavalink: ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%
-\`\`\``,
-            inline: false,
+            value: fields.join("\n"),
+            inline: true,
           },
         ]);
       } else {
+        // Nodo inactivo: mensaje predeterminado
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
-            value: `\`\`\`
-Estado: ${statusIcon}
-No hay estadísticas disponibles.
-\`\`\``,
-            inline: false,
+            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
+            inline: true,
           },
         ]);
       }

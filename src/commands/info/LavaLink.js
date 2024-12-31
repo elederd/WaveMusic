@@ -34,9 +34,7 @@ module.exports = class LavaLink extends Command {
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
     embed.setDescription(
-        "\n" +
-        "🟢 = Activo | 🔴 = Inactivo" +
-        "\n" 
+      "\n"
     );
     embed.setFooter({
       text: `Solicitado por ${ctx.author.username}`,
@@ -57,7 +55,7 @@ module.exports = class LavaLink extends Command {
           `**Cores:** ${node.stats.cpu.cores} Core(s)`,
           `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
           `**Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
-          `**Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+          `**Carga de Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
         ];
 
         embed.addFields([
@@ -72,7 +70,7 @@ module.exports = class LavaLink extends Command {
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
-            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
+            value: `**Estado:** ${statusIcon}\nNo disponible.`,
             inline: true,
           },
         ]);
@@ -81,4 +79,4 @@ module.exports = class LavaLink extends Command {
 
     return await ctx.sendMessage({ embeds: [embed] });
   }
-};             
+};

@@ -65,15 +65,15 @@ module.exports = class LavaLink extends Command {
       });
     });
 
-    // Organizar los servidores en 2 columnas y 3 filas
-    const rows = [];
+    // Dividir los servidores en 2 columnas por fila
+    let rows = [];
     for (let i = 0; i < serverFields.length; i += 2) {
-      rows.push(serverFields.slice(i, i + 2));  // Cada fila tendrá 2 servidores
+      rows.push(serverFields.slice(i, i + 2));  // 2 servidores por fila
     }
 
     // Añadir las filas al embed
     rows.forEach((row) => {
-      embed.addFields(row);
+      embed.addFields(row);  // Esto agrega la fila con 2 servidores
     });
 
     return await ctx.sendMessage({ embeds: [embed] });

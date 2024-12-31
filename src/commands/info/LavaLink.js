@@ -70,8 +70,8 @@ module.exports = class LavaLink extends Command {
 
     // Organizar los servidores en filas de 3 columnas
     const rows = [];
-    for (let i = 0; i < serverFields.length; i += 3) {
-      rows.push(serverFields.slice(i, i + 3));
+    for (let i = 0; i < serverFields.length; i += 2) {
+      rows.push(serverFields.slice(i, i + 2));
     }
 
     // Añadir las filas al embed

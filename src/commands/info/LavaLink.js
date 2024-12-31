@@ -34,7 +34,6 @@ module.exports = class LavaLink extends Command {
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
     embed.setDescription(
-      "Aquí están las estadísticas actuales de los nodos Lavalink que están en uso.\n" +
         "🟢 = Activo | 🔴 = Inactivo"
     );
     embed.setFooter({

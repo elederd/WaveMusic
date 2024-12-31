@@ -34,7 +34,7 @@ module.exports = class LavaLink extends Command {
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
     embed.setDescription(
-      "\n"
+      " \n"
     );
     embed.setFooter({
       text: `Solicitado por ${ctx.author.username}`,
@@ -70,7 +70,7 @@ module.exports = class LavaLink extends Command {
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
-            value: `**Estado:** ${statusIcon}\nNo hay estadísticas disponibles.`,
+            value: `**Estado:** ${statusIcon}\nServer no disponibles.`,
             inline: true,
           },
         ]);

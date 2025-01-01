@@ -33,9 +33,7 @@ module.exports = class LavaLink extends Command {
     embed.setTitle("Lavalink Status");
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
-    embed.setDescription(
-      "\n"
-    );
+    embed.setDescription("\n");
     embed.setFooter({
       text: `Solicitado por ${ctx.author.username}`,
       iconURL: ctx.author.avatarURL(),
@@ -44,9 +42,7 @@ module.exports = class LavaLink extends Command {
 
     client.shoukaku.nodes.forEach((node) => {
       const statusIcon = node.stats ? "🟢" : "🔴";
-
-      if (node.stats) {
-        // Nodo activo: mostrar estadísticas detalladas
+      
       const fields = [
         `**Estado:** ${statusIcon}`,
         `**Conectados:** ${node.stats ? node.stats.players : "N/A"}`,
@@ -58,25 +54,15 @@ module.exports = class LavaLink extends Command {
         `**Lavalink:** ${node.stats ? (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2) : "N/A"}%`,
       ];
 
-        embed.addFields([
-          {
-            name: `🖥️ **${node.name}**`,
-            value: fields.join("\n"),
-            inline: true,
-          },
-        ]);
-      } else {
-        // Nodo inactivo: mensaje predeterminado
-        embed.addFields([
-          {
-            name: `🖥️ **${node.name}**`,
-            value: `**Estado:** ${statusIcon}\nServer no disponible.`,
-            inline: true,
-          },
-        ]);
-      }
+      embed.addFields([
+        {
+          name: `🖥️ **${node.name}**`,
+          value: node.stats ? fields.join("\n") : `**Estado:** ${statusIcon}\nServer no disponible.`,
+          inline: true,
+        },
+      ]);
     });
 
     return await ctx.sendMessage({ embeds: [embed] });
   }
-};             
+};

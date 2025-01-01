@@ -41,9 +41,11 @@ module.exports = class LavaLink extends Command {
     embed.setTimestamp();
 
     client.shoukaku.nodes.forEach((node) => {
-      const statusIcon = node.connected ? "🟢" : "🔴";
+      // Validar si el nodo está activo y tiene estadísticas disponibles
+      const isNodeActive = node.connected && node.stats;
+      const statusIcon = isNodeActive ? "🟢" : "🔴";
 
-      if (node.connected && node.stats) {
+      if (isNodeActive) {
         // Nodo activo: mostrar estadísticas detalladas
         const fields = [
           `**Estado:** ${statusIcon}`,
@@ -64,7 +66,7 @@ module.exports = class LavaLink extends Command {
           },
         ]);
       } else {
-        // Nodo inactivo o desconectado
+        // Nodo inactivo o sin estadísticas
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,

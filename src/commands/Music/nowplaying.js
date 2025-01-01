@@ -28,35 +28,26 @@ module.exports = class Nowplaying extends Command {
       options: [],
     });
   }
-
   async run(client, ctx) {
     const player = client.queue.get(ctx.guild.id);
     const track = player.current;
     const position = player.player.position;
     const duration = track.info.length;
     const bar = client.utils.progressBar(position, duration, 20);
-
     const embed1 = this.client
       .embed()
       .setColor(this.client.color.main)
       .setAuthor({ name: "Now Playing", iconURL: ctx.guild.iconURL({}) })
       .setThumbnail(track.info.artworkUrl)
       .setDescription(
-        `[${track.info.title}](${track.info.uri}) - Requested by: ${track.info.requester}\n\n\`${bar}\``
+        `[${track.info.title}](${track.info.uri}) - Request By: ${track.info.requester}\n\n\`${bar}\``
       )
-      .addFields(
-        {
-          name: "Song",
-          value: track.info.title,
-          inline: true
-        },
-        {
-          name: "\u200b",
-          value: `\`${client.utils.formatTime(position)} / ${client.utils.formatTime(duration)}\``,
-          inline: true
-        }
-      );
-
+      .addFields({
+        name: "\u200b",
+        value: `\`${client.utils.formatTime(
+          position
+        )} / ${client.utils.formatTime(duration)}\``,
+      });
     return await ctx.sendMessage({ embeds: [embed1] });
   }
 };

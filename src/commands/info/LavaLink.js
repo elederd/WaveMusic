@@ -33,9 +33,7 @@ module.exports = class LavaLink extends Command {
     embed.setTitle("Lavalink Status");
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
-    embed.setDescription(
-      "\n"
-    );
+    embed.setDescription("\n");
     embed.setFooter({
       text: `Solicitado por ${ctx.author.username}`,
       iconURL: ctx.author.avatarURL(),
@@ -43,20 +41,20 @@ module.exports = class LavaLink extends Command {
     embed.setTimestamp();
 
     client.shoukaku.nodes.forEach((node) => {
-      const statusIcon = node.stats ? "🟢" : "🔴";
+      const statusIcon = node.connected ? "🟢" : "🔴";
 
-      if (node.stats) {
+      if (node.connected && node.stats) {
         // Nodo activo: mostrar estadísticas detalladas
-      const fields = [
-        `**Estado:** ${statusIcon}`,
-        `**Conectados:** ${node.stats ? node.stats.players : "N/A"}`,
-        `**Reproduciendo:** ${node.stats ? node.stats.playingPlayers : "N/A"}`,
-        `**Activo:** ${node.stats ? client.utils.formatTime(node.stats.uptime) : "N/A"}`,
-        `**Cores:** ${node.stats ? node.stats.cpu.cores : "N/A"} Core(s)`,
-        `**Memoria:** ${node.stats ? client.utils.formatBytes(node.stats.memory.used) : "N/A"} / ${node.stats ? client.utils.formatBytes(node.stats.memory.reservable) : "N/A"}`,
-        `**Sistema:** ${node.stats ? (Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2) : "N/A"}%`,
-        `**Lavalink:** ${node.stats ? (Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2) : "N/A"}%`,
-      ];
+        const fields = [
+          `**Estado:** ${statusIcon}`,
+          `**Conectados:** ${node.stats.players}`,
+          `**Reproduciendo:** ${node.stats.playingPlayers}`,
+          `**Activo:** ${client.utils.formatTime(node.stats.uptime)}`,
+          `**Cores:** ${node.stats.cpu.cores} Core(s)`,
+          `**Memoria:** ${client.utils.formatBytes(node.stats.memory.used)} / ${client.utils.formatBytes(node.stats.memory.reservable)}`,
+          `**Sistema:** ${(Math.round(node.stats.cpu.systemLoad * 100) / 100).toFixed(2)}%`,
+          `**Lavalink:** ${(Math.round(node.stats.cpu.lavalinkLoad * 100) / 100).toFixed(2)}%`,
+        ];
 
         embed.addFields([
           {
@@ -66,7 +64,7 @@ module.exports = class LavaLink extends Command {
           },
         ]);
       } else {
-        // Nodo inactivo: mensaje predeterminado
+        // Nodo inactivo o desconectado
         embed.addFields([
           {
             name: `🖥️ **${node.name}**`,
@@ -79,4 +77,4 @@ module.exports = class LavaLink extends Command {
 
     return await ctx.sendMessage({ embeds: [embed] });
   }
-};             
+};

@@ -1,5 +1,4 @@
 const Command = require("../../structures/Command.js");
-const { Riffy } = require("riffy");
 const { EmbedBuilder, AttachmentBuilder } = require("discord.js");
 const { Dynamic } = require("musicard");
 const fs = require("fs");

@@ -30,7 +30,7 @@ module.exports = class LavaLink extends Command {
 
   async run(client, ctx) {
     const embed = this.client.embed();
-    embed.setTitle("🌐  Lavalink Status");
+    embed.setTitle("Lavalink Status");
     embed.setColor(this.client.color.main);
     embed.setThumbnail(this.client.user.avatarURL({}));
     embed.setDescription(

@@ -4,13 +4,21 @@ module.exports = {
     data: new SlashCommandBuilder()
         .setName('restart')
         .setDescription('Reinicia el bot en Render'),
+
     async execute(interaction) {
+        // Verificación de permisos (cambia esto por tu ID de Discord)
+        const ownerId = 'TU_ID_DE_DISCORD_AQUI';
+        if (interaction.user.id !== ownerId) {
+            return await interaction.reply({ content: '❌ No tienes permiso para reiniciar el bot.', ephemeral: true });
+        }
+
+        // Variables de entorno
         const API_KEY = process.env.APIKEY;
         const SERVICE_ID = process.env.SERVICEID;
 
         if (!API_KEY || !SERVICE_ID) {
             console.error('⚠️ APIKEY o SERVICEID no están definidos en las variables de entorno.');
-            return await interaction.reply('❌ Error: Configuración incorrecta del bot.');
+            return await interaction.reply({ content: '❌ Error de configuración del bot.', ephemeral: true });
         }
 
         try {
@@ -27,10 +35,11 @@ module.exports = {
                 throw new Error(`Error ${response.status}: ${errorText}`);
             }
 
-            await interaction.reply('✅ El bot se está reiniciando en Render.');
+            await interaction.reply({ content: '✅ El bot se está reiniciando en Render.', ephemeral: true });
+            console.log('✅ El bot ha recibido la orden de reinicio.');
         } catch (error) {
             console.error('❌ Error al reiniciar el bot:', error);
-            await interaction.reply('❌ Hubo un error al intentar reiniciar el bot.');
+            await interaction.reply({ content: '❌ Hubo un error al intentar reiniciar el bot.', ephemeral: true });
         }
     }
 };

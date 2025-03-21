@@ -1,5 +1,4 @@
 const { SlashCommandBuilder } = require('discord.js');
-const fetch = require('node-fetch'); // Asegurar que fetch está disponible en Node.js
 
 module.exports = {
     data: new SlashCommandBuilder()
@@ -24,7 +23,7 @@ module.exports = {
             });
 
             if (!response.ok) {
-                const errorText = await response.text(); // Obtener respuesta detallada
+                const errorText = await response.text();
                 throw new Error(`Error ${response.status}: ${errorText}`);
             }
 

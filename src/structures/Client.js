@@ -66,9 +66,7 @@ module.exports = class WaveMusic extends Client {
         .readdirSync(path.join(__dirname, `../commands/${dir}`))
         .filter((file) => file.endsWith(".js"));
       commandFiles.forEach(async (file) => {
-        console.log(file, cmd);
         const cmd = require(`../commands/${dir}/${file}`);
-        console.log(file, cmd);
         const command = new cmd(this, file);
         command.category = dir;
         this.commands.set(command.name, command);

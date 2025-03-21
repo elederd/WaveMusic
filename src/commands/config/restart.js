@@ -7,7 +7,7 @@ module.exports = {
 
     async execute(interaction) {
         // Verificación de permisos (cambia esto por tu ID de Discord)
-        const ownerId = 'TU_ID_DE_DISCORD_AQUI';
+        const ownerId = '218559611320401920';
         if (interaction.user.id !== ownerId) {
             return await interaction.reply({ content: '❌ No tienes permiso para reiniciar el bot.', ephemeral: true });
         }
